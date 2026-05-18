@@ -9,9 +9,9 @@
   <title>AURA Gold ZATCA Pro</title>
   <style>
     :root{
-      --gold:#c9a84c;--gold2:#a07830;--gold3:#f5e6c0;--gold4:#7a5c1e;
-      --dark:#0a0a0a;--ink:#1a1201;--muted:#7b6b4a;--line:#e5d8b0;
-      --bg:#f8f5ee;--red:#b91c1c;--green:#155e3e;--blue:#1e3a8a;--radius:14px;
+      --gold:#c9a84c; --gold2:#a07830; --gold3:#f5e6c0; --gold4:#7a5c1e;
+      --dark:#0a0a0a; --ink:#1a1201; --muted:#7b6b4a; --line:#e5d8b0;
+      --bg:#f8f5ee; --red:#b91c1c; --green:#155e3e; --blue:#1e3a8a; --radius:14px;
     }
     *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
     html,body{margin:0;padding:0}
@@ -75,8 +75,8 @@
     .ihdr{display:flex;justify-content:space-between;align-items:flex-start;gap:6mm;padding-bottom:5mm;border-bottom:1.5px solid #c9a84c;margin-bottom:4mm}
     .isbl{display:flex;align-items:center;gap:3mm}
     .ilogo,.ilogoph{width:64px;height:64px;border-radius:10px;border:none;flex-shrink:0;background:#fff}
-    .ilogo{object-fit:cover}
-    .ilogoph{background:linear-gradient(135deg,#f5e6c0,#c9a84c,#7a5c1e);display:grid;place-items:center;font-size:24px;font-weight:900;color:#0a0a0a}
+    .ilogo{object-fit:cover;display:block;margin:0 auto}
+    .ilogoph{background:linear-gradient(135deg,#f5e6c0,#c9a84c,#7a5c1e);display:grid;place-items:center;font-size:24px;font-weight:900;color:#0a0a0a;margin:0 auto}
     .isname{font-size:19px;font-weight:900;color:#0a0a0a}
     .isinfo{font-size:9px;color:#5a4a2a;margin-top:4px;line-height:1.9}
     .itblock{text-align:right}
@@ -154,7 +154,7 @@
       .topbar,.app,.nav,#toast{display:none !important}
       #printArea{display:block !important}
     }
-    @media(max-width:420px){
+    @media (max-width:420px){
       .g2{grid-template-columns:1fr}
       .ibot,.ihdr,.iftr{display:block}
       .iqrb{margin-top:10px}
@@ -178,11 +178,14 @@
         <div class="bsub" id="appSub">Simplified Tax Invoice</div>
       </div>
     </div>
-    <select id="langSel"><option value="en">English</option><option value="ar">العربية</option></select>
+    <select id="langSel">
+      <option value="en">English</option>
+      <option value="ar">العربية</option>
+    </select>
   </div>
 
   <div class="app">
-    <div id="qrLibStatus">⚠️ QR library loading...</div>
+    <div id="qrLibStatus">⚠️ QR library loading... Please wait or check internet connection.</div>
 
     <div class="panel" id="pShop">
       <div class="ph" onclick="togglePanel('pShop')"><span class="ph-ttl" data-k="shop">Shop Info</span><span class="ph-arr">▾</span></div>
@@ -211,8 +214,6 @@
               </div>
               <div style="height:10px"></div>
               <input id="shopSnap" placeholder="Snapchat" oninput="saveSettings();renderInvoice()" />
-              <div style="height:10px"></div>
-              <input id="shopWhatsapp" placeholder="WhatsApp (e.g. 966512345678)" oninput="saveSettings();renderInvoice()" />
             </div>
             <div>
               <span class="lbl">تنبيه / Disclaimer</span>
@@ -250,8 +251,11 @@
           <div>
             <span class="lbl" data-k="lPayType">Payment</span>
             <select id="payType" onchange="renderInvoice()">
-              <option value="Cash">Cash</option><option value="Card">Card</option>
-              <option value="Transfer">Bank Transfer</option><option value="Mixed">Mixed</option><option value="Credit">Credit</option>
+              <option value="Cash">Cash</option>
+              <option value="Card">Card</option>
+              <option value="Transfer">Bank Transfer</option>
+              <option value="Mixed">Mixed</option>
+              <option value="Credit">Credit</option>
             </select>
           </div>
           <div><span class="lbl" data-k="lExp">Expense (SAR)</span><input id="expAmt" type="number" min="0" step="0.01" value="0" oninput="calc()" /></div>
@@ -290,7 +294,7 @@
       <div class="pb" style="padding:0;overflow:hidden">
         <div id="invOut"></div>
         <div style="padding:10px" class="g2">
-          <button class="dk" onclick="exportBackup()" data-k="lExport">⬇ Export Backup</button>
+          <button class="dk" onclick="exportBackup()" data-k="lExport">⬇ Export Backup (JSON)</button>
           <button class="blue" onclick="previewScanData()">🔍 QR Data</button>
         </div>
       </div>
@@ -334,7 +338,7 @@
       var s=document.createElement("script");
       s.src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js";
       s.onload=function(){QR_LOADING=false;document.getElementById("qrLibStatus").style.display="none";cb&&cb();};
-      s.onerror=function(){QR_LOADING=false;var st=document.getElementById("qrLibStatus");st.style.display="block";st.textContent="⚠️ QR failed. Check internet.";};
+      s.onerror=function(){QR_LOADING=false;var st=document.getElementById("qrLibStatus");st.style.display="block";st.textContent="⚠️ QR library failed to load. Check internet and reload.";};
       document.head.appendChild(s);
     }
     loadQRLib(function(){if(typeof renderInvoice==="function")renderInvoice();});
@@ -375,7 +379,7 @@
         lShowQr:"إظهار QR في الفاتورة",lItems:"أصناف الذهب",lAddItem:"إضافة صنف",lDup:"نسخ",
         lTotals:"الإجماليات",lSub:"الإجمالي الفرعي",lTax:"القيمة الخاضعة للضريبة",lVatAmt:"قيمة الضريبة",lGrand:"الإجمالي الكلي",
         lPaidLbl:"المدفوع",lBal:"المتبقي",lPreview:"معاينة الفاتورة",lHistory:"سجل الفواتير",
-        lTools:"الأدوات",lImport:"استيراد",lNewNo:"رقم جديد",lExport:"تصدير نسخة احتياطية",lSave:"حفظ",
+        lTools:"الأدوات",lImport:"استيراد",lNewNo:"رقم جديد",lExport:"تصدير نسخة احتياطية (JSON)",lSave:"حفظ",
         lNew:"جديد",lPrint:"طباعة",confirmNew:"بدء فاتورة جديدة؟",confirmDel:"حذف هذه الفاتورة؟",
         saved:"تم حفظ الفاتورة!",imported:"تم الاستيراد!",
         lItemType:"نوع الصنف",lKarat:"العيار",lUnit:"الوحدة",lQty:"الكمية",lWeight:"الوزن (جم)",lRateG:"سعر/جم",
@@ -416,7 +420,7 @@
     function safeConfirm(msg){try{return window.confirm(msg);}catch(e){return true;}}
     function confirmNewInvoice(){if(safeConfirm(TL.confirmNew))newInvoice();}
 
-    // ══ SHOP LOCK — Password change karo ══
+    // ══ SHOP LOCK — Change password below ══
     const ADMIN_PASSWORD="aura2024";
     function isShopLocked(){return getLS("au.shoplock")==="1";}
     function applyLockState(){
@@ -483,11 +487,10 @@
 
     function socialIcon(name){
       const c='width="12" height="12" viewBox="0 0 24 24" fill="currentColor"';
-      if(name==="instagram")return `<svg ${c}><path d="M7 2h10a5 5 0 0 1 5 5v10a5 5 0 0 1-5 5H7a5 5 0 0 1-5-5V7a5 5 0 0 1 5-5zm0 2a3 3 0 0 0-3 3v10a3 3 0 0 0 3 3h10a3 3 0 0 0 3-3V7a3 3 0 0 0-3-3H7zm5 3.5A5.5 5.5 0 1 1 6.5 13 5.5 5.5 0 0 1 12 7.5zm0 2A3.5 3.5 0 1 0 15.5 13 3.5 3.5 0 0 0 12 9.5zM18 6.3a1.2 1.2 0 1 1-1.2 1.2A1.2 1.2 0 0 1 18 6.3z"/></svg>`;
-      if(name==="tiktok")return `<svg ${c}><path d="M16.5 2h2.7a5.8 5.8 0 0 0 2.8 3.1v2.8a8.5 8.5 0 0 1-3.3-.8v6.4a6.5 6.5 0 1 1-6.5-6.5c.3 0 .6 0 .9.1v2.8a3.7 3.7 0 1 0 2.8 3.6V2z"/></svg>`;
-      if(name==="snapchat")return `<svg ${c}><path d="M12 2c2.7 0 4.8 2.2 4.8 4.9 0 .7-.1 1.4-.4 2 .5.8 1.2 1.4 2.1 1.7.4.1.7.5.7.9s-.3.8-.7.9c-.6.2-1.2.3-1.8.4-.1.5-.2 1 .3 1.4.2.2.3.4.3.7 0 .5-.4 1-.9 1-.9 0-1.7-.3-2.4-.8-.6.3-1.3.5-2 .5s-1.4-.2-2-.5c-.7.5-1.5.8-2.4.8-.5 0-.9-.5-.9-1 0-.3.1-.5.3-.7.5-.4.4-.9.3-1.4-.6-.1-1.2-.2-1.8-.4-.4-.1-.7-.5-.7-.9s.3-.8.7-.9c.9-.3 1.6-.9 2.1-1.7-.3-.6-.4-1.3-.4-2C7.2 4.2 9.3 2 12 2z"/></svg>`;
-      if(name==="whatsapp")return `<svg ${c}><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 2C6.477 2 2 6.477 2 12c0 1.89.525 3.66 1.438 5.168L2 22l4.878-1.424A9.956 9.956 0 0 0 12 22c5.522 0 10-4.478 10-10S17.521 2 12 2zm0 18a7.946 7.946 0 0 1-4.099-1.136l-.294-.174-3.048.889.924-2.975-.192-.306A7.948 7.948 0 0 1 4 12c0-4.411 3.589-8 8-8s8 3.589 8 8-3.589 8-8 8z"/></svg>`;
-      return "";
+      if(name==='instagram')return `<svg ${c}><path d="M7 2h10a5 5 0 0 1 5 5v10a5 5 0 0 1-5 5H7a5 5 0 0 1-5-5V7a5 5 0 0 1 5-5zm0 2a3 3 0 0 0-3 3v10a3 3 0 0 0 3 3h10a3 3 0 0 0 3-3V7a3 3 0 0 0-3-3H7zm5 3.5A5.5 5.5 0 1 1 6.5 13 5.5 5.5 0 0 1 12 7.5zm0 2A3.5 3.5 0 1 0 15.5 13 3.5 3.5 0 0 0 12 9.5zM18 6.3a1.2 1.2 0 1 1-1.2 1.2A1.2 1.2 0 0 1 18 6.3z"/></svg>`;
+      if(name==='tiktok')return `<svg ${c}><path d="M16.5 2h2.7a5.8 5.8 0 0 0 2.8 3.1v2.8a8.5 8.5 0 0 1-3.3-.8v6.4a6.5 6.5 0 1 1-6.5-6.5c.3 0 .6 0 .9.1v2.8a3.7 3.7 0 1 0 2.8 3.6V2z"/></svg>`;
+      if(name==='snapchat')return `<svg ${c}><path d="M12 2c2.7 0 4.8 2.2 4.8 4.9 0 .7-.1 1.4-.4 2 .5.8 1.2 1.4 2.1 1.7.4.1.7.5.7.9s-.3.8-.7.9c-.6.2-1.2.3-1.8.4-.1.5-.2 1 .3 1.4.2.2.3.4.3.7 0 .5-.4 1-.9 1-.9 0-1.7-.3-2.4-.8-.6.3-1.3.5-2 .5s-1.4-.2-2-.5c-.7.5-1.5.8-2.4.8-.5 0-.9-.5-.9-1 0-.3.1-.5.3-.7.5-.4.4-.9.3-1.4-.6-.1-1.2-.2-1.8-.4-.4-.1-.7-.5-.7-.9s.3-.8.7-.9c.9-.3 1.6-.9 2.1-1.7-.3-.6-.4-1.3-.4-2C7.2 4.2 9.3 2 12 2z"/></svg>`;
+      return '';
     }
 
     function numberToWordsEn(num){
@@ -518,26 +521,27 @@
       let sub=0,vat=0,discTotal=0,tax=0;
       items.forEach(it=>{const m=itemMath(it,vr);sub+=m.preVat;discTotal+=nVal(it.disc);if(it.vat)tax+=m.preVat;vat+=m.vatAmt;});
       const exp=nVal($("expAmt").value),grand=sub+vat+exp,paid=nVal($("paidAmt").value),bal=grand-paid;
+      const payRaw=$("payType").value;
       return{
         shop:$("shopName").value||"AURA Gold Shop",shopChar:($("shopName").value||"A").trim()[0].toUpperCase(),
         vatNo:$("shopVat").value,phone:$("shopPhone").value,addr:$("shopAddr").value,
         shopCr:$("shopCr").value,shopMetalLic:$("shopMetalLic").value,shopDisclaimer:$("shopDisclaimer").value,
-        insta:$("shopInsta").value,tiktok:$("shopTiktok").value,snap:$("shopSnap").value,whatsapp:$("shopWhatsapp").value,
+        insta:$("shopInsta").value,tiktok:$("shopTiktok").value,snap:$("shopSnap").value,
         logo:getLS("au.logo")||"",
         invNo:$("invNo").value,rawDate:$("invDate").value,invDate:$("invDate").value.replace("T"," "),
         cName:$("custName").value||"—",cPhone:$("custPhone").value,
         vr,vr100,sub,tax,vat,exp,grand,paid,bal,discTotal,
-        pay:t($("payType").value),payRaw:$("payType").value,
-        notes:$("notes").value,showQr:$("showQr").checked,
+        pay:t(payRaw),payRaw,notes:$("notes").value,showQr:$("showQr").checked,
         items:[...items],isRTL:L==="ar"
       };
     }
 
     function toISOForZATCA(raw){try{if(!raw)return new Date().toISOString();const d=new Date(raw.includes("T")?raw:raw.replace(" ","T"));return isNaN(d.getTime())?new Date().toISOString():d.toISOString();}catch(e){return new Date().toISOString();}}
-    function tlvField(tag,val){const v=enc(val||"");return new Uint8Array([tag,v.length,...v]);}
+    function tlvField(tag,val){const v=enc(val||"");const tg=new Uint8Array([tag]);const l=new Uint8Array([v.length]);return new Uint8Array([...tg,...l,...v]);}
     function concatBytes(parts){const len=parts.reduce((s,p)=>s+p.length,0);const out=new Uint8Array(len);let off=0;parts.forEach(p=>{out.set(p,off);off+=p.length;});return out;}
     function bytesToBase64(bytes){let bin="";bytes.forEach(b=>bin+=String.fromCharCode(b));return btoa(bin);}
-    function buildZatcaBase64(d){return bytesToBase64(concatBytes([tlvField(1,d.shop),tlvField(2,d.vatNo),tlvField(3,toISOForZATCA(d.rawDate)),tlvField(4,money(d.grand)),tlvField(5,money(d.vat))]));}
+    function buildZatcaBase64(d){const ts=toISOForZATCA(d.rawDate);const payload=concatBytes([tlvField(1,d.shop),tlvField(2,d.vatNo),tlvField(3,ts),tlvField(4,money(d.grand)),tlvField(5,money(d.vat))]);return bytesToBase64(payload);}
+    function buildScanText(d){const lines=[];lines.push(`Seller: ${d.shop}`);lines.push(`VAT No: ${d.vatNo||"—"}`);lines.push(`Invoice No: ${d.invNo}`);lines.push(`Date: ${d.invDate}`);lines.push(`Grand Total: SAR ${money(d.grand)}`);lines.push(`VAT: SAR ${money(d.vat)}`);return lines.join("\n");}
 
     function generateQRDataURL(text,size){
       size=size||220;
@@ -549,14 +553,7 @@
           document.body.appendChild(box);
           new QRCode(box,{text:String(text||" "),width:size,height:size,colorDark:"#000000",colorLight:"#ffffff",correctLevel:QRCode.CorrectLevel.M});
           var tries=0;
-          function attempt(){tries++;try{
-            var img=box.querySelector("img"),canvas=box.querySelector("canvas"),dataURL="";
-            if(canvas)dataURL=canvas.toDataURL("image/png");
-            else if(img&&img.src&&img.src.startsWith("data:"))dataURL=img.src;
-            if(dataURL&&dataURL.length>100){box.remove();resolve(dataURL);}
-            else if(tries<15)setTimeout(attempt,100);
-            else{box.remove();reject(new Error("QR timeout"));}
-          }catch(e){box.remove();reject(e);}}
+          function attempt(){tries++;try{var img=box.querySelector("img"),canvas=box.querySelector("canvas"),dataURL="";if(canvas)dataURL=canvas.toDataURL("image/png");else if(img&&img.src&&img.src.startsWith("data:"))dataURL=img.src;if(dataURL&&dataURL.length>100){box.remove();resolve(dataURL);}else if(tries<15)setTimeout(attempt,100);else{box.remove();reject(new Error("QR timeout"));}}catch(e){box.remove();reject(e);}}
           setTimeout(attempt,150);
         }catch(e){reject(e);}
       });
@@ -564,17 +561,12 @@
     async function getQRCodeImage(d){return await generateQRDataURL(buildZatcaBase64(d),220);}
 
     function buildInvHTML(d,qrImgSrc){
-      const rows=d.items.map((it,i)=>{
-        const m=itemMath(it,d.vr);
-        const desc=`${t(it.tp)} ${t(it.kt)}${nVal(it.qty)!==1?" × "+it.qty:""}`;
-        return `<tr><td style="white-space:normal"><span class="ibadge2">${i+1}</span>${desc}</td><td>${num3(m.totalWt)}</td><td>${money(it.rate)}</td><td>${money(m.preVat)}</td><td>${money(m.vatAmt)}</td><td>${money(m.total)}</td></tr>`;
-      }).join("");
+      const rows=d.items.map((it,i)=>{const m=itemMath(it,d.vr);const desc=`${t(it.tp)} ${t(it.kt)}${nVal(it.qty)!==1?" × "+it.qty:""}`;return `<tr><td style="white-space:normal"><span class="ibadge2">${i+1}</span>${desc}</td><td>${num3(m.totalWt)}</td><td>${money(it.rate)}</td><td>${money(m.preVat)}</td><td>${money(m.vatAmt)}</td><td>${money(m.total)}</td></tr>`;}).join("");
       const qrSlot=d.showQr&&qrImgSrc?`<div class="iqrb"><img src="${qrImgSrc}" alt="QR" width="110" height="110"></div>`:"";
       const smParts=[];
       if(d.insta)smParts.push(`<span class="soc"><span class="soc-ico">${socialIcon("instagram")}</span><span>${d.insta}</span></span>`);
       if(d.tiktok)smParts.push(`<span class="soc"><span class="soc-ico">${socialIcon("tiktok")}</span><span>${d.tiktok}</span></span>`);
       if(d.snap)smParts.push(`<span class="soc"><span class="soc-ico">${socialIcon("snapchat")}</span><span>${d.snap}</span></span>`);
-      if(d.whatsapp)smParts.push(`<span class="soc"><span class="soc-ico">${socialIcon("whatsapp")}</span><span>${d.whatsapp}</span></span>`);
       const smRow=smParts.length?`<div class="social-row">${smParts.join("")}</div>`:"";
       const crLine=[d.shopCr?`CR: ${d.shopCr}`:"",d.shopMetalLic?`رخصة المعادن: ${d.shopMetalLic}`:""].filter(Boolean).join(" | ");
       const infoBits=[d.phone,d.vatNo?`${t("iVatN")}: ${d.vatNo}`:"",crLine,d.addr].filter(Boolean).join("<br>");
@@ -588,7 +580,7 @@
         <div class="ibody ${d.isRTL?"inv-rtl":""}">
           <div class="ihdr">
             <div class="isbl">
-              ${d.logo?`<img src="${d.logo}" class="ilogo" alt="">`:`<div class="ilogoph">${d.shopChar}</div>`}
+              ${d.logo?`<img src="${d.logo}" class="ilogo" alt="">` :`<div class="ilogoph">${d.shopChar}</div>`}
               <div><div class="isname">${d.shop}</div><div class="isinfo">${infoBits}</div></div>
             </div>
             <div class="itblock">
@@ -653,7 +645,7 @@
     function saveSettings(){
       saveLS("au.settings",JSON.stringify({
         shopName:$("shopName").value,shopVat:$("shopVat").value,shopPhone:$("shopPhone").value,shopAddr:$("shopAddr").value,
-        shopInsta:$("shopInsta").value,shopTiktok:$("shopTiktok").value,shopSnap:$("shopSnap").value,shopWhatsapp:$("shopWhatsapp").value,
+        shopInsta:$("shopInsta").value,shopTiktok:$("shopTiktok").value,shopSnap:$("shopSnap").value,
         shopCr:$("shopCr").value,shopMetalLic:$("shopMetalLic").value,shopDisclaimer:$("shopDisclaimer").value,lang:L
       }));
       updateBrand();
@@ -664,8 +656,7 @@
         const s=JSON.parse(getLS("au.settings")||"{}");
         $("shopName").value=s.shopName||"AURA Gold Shop";
         $("shopVat").value=s.shopVat||"";$("shopPhone").value=s.shopPhone||"";$("shopAddr").value=s.shopAddr||"";
-        $("shopInsta").value=s.shopInsta||"";$("shopTiktok").value=s.shopTiktok||"";
-        $("shopSnap").value=s.shopSnap||"";$("shopWhatsapp").value=s.shopWhatsapp||"";
+        $("shopInsta").value=s.shopInsta||"";$("shopTiktok").value=s.shopTiktok||"";$("shopSnap").value=s.shopSnap||"";
         $("shopCr").value=s.shopCr||"";$("shopMetalLic").value=s.shopMetalLic||"";
         $("shopDisclaimer").value=s.shopDisclaimer!==undefined?s.shopDisclaimer:"وزن الحجر لا يتجاوز %5 من وزنه والبضاعه المباعه لا ترد ولاتستبدل بعد خروجها من المحل الا بقصد البيع";
         L=s.lang||"en";$("langSel").value=L;
@@ -716,4 +707,39 @@
     function loadHistoryIndex(i){const arr=getInvoices(),q=($("histQ").value||"").toLowerCase().trim();const filtered=arr.filter(x=>{const hay=[x.invNo,x.cName,x.cPhone,x.shop].join(" ").toLowerCase();return !q||hay.includes(q);});if(filtered[i])loadInvoice(filtered[i]);}
     function deleteHistoryIndex(i){if(!safeConfirm(t("confirmDel")))return;const arr=getInvoices(),q=($("histQ").value||"").toLowerCase().trim();const filtered=arr.filter(x=>{const hay=[x.invNo,x.cName,x.cPhone,x.shop].join(" ").toLowerCase();return !q||hay.includes(q);});const target=filtered[i];if(!target)return;setInvoices(arr.filter(x=>x.invNo!==target.invNo));renderHistory();}
 
-    function exportBackup(){try{const payload={settings:JSON.parse(getLS("au.settings")||"{}"),logo:getLS("au.logo")||null,counter:getLS("au.cnt")||"1",invoices:getInvoices()};const blob=new Blob([JSON.stringify(payload,null,2)],{type:"application/json"});const a=document
+    function exportBackup(){try{const payload={settings:JSON.parse(getLS("au.settings")||"{}"),logo:getLS("au.logo")||null,counter:getLS("au.cnt")||"1",invoices:getInvoices()};const blob=new Blob([JSON.stringify(payload,null,2)],{type:"application/json"});const a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download="AURAGoldZATCAProBackup.json";document.body.appendChild(a);a.click();setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove();},1000);}catch(e){alert("Export failed: "+e.message);}}
+
+    function onImport(input){const file=input.files&&input.files[0];if(!file)return;const fr=new FileReader();fr.onload=e=>{try{const data=JSON.parse(e.target.result);if(data.settings)saveLS("au.settings",JSON.stringify(data.settings));if(data.logo)saveLS("au.logo",data.logo);if(data.counter)saveLS("au.cnt",String(data.counter));if(Array.isArray(data.invoices))setInvoices(data.invoices);loadSettings();setLang(L);renderHistory();toast(t("imported"));}catch(err){alert("Invalid JSON backup");}input.value="";};fr.readAsText(file);}
+
+    async function previewScanData(){const d=getData();alert("ZATCA QR:\n\n"+buildZatcaBase64(d)+"\n\nData:\n\n"+buildScanText(d));}
+
+    async function doPrint(){
+      if(!validate())return;
+      const d=getData();let qrImg="";
+      try{if(d.showQr&&typeof QRCode!=="undefined")qrImg=await getQRCodeImage(d);}catch(e){qrImg="";}
+      const invHTML=buildInvHTML(d,qrImg);
+      $("invOut").innerHTML=invHTML;
+      const pa=$("printArea");pa.innerHTML=invHTML;pa.style.display="block";
+      setTimeout(function(){try{window.print();}catch(err){}setTimeout(function(){pa.style.display="none";},2000);},600);
+    }
+
+    window.addEventListener("afterprint",function(){try{var pa=$("printArea");if(pa)pa.style.display="none";}catch(e){}});
+    window.addEventListener("focus",function(){try{var pa=$("printArea");if(pa&&pa.style.display==="block")pa.style.display="none";}catch(e){}});
+
+    function newInvoice(){
+      $("invNo").value=useInvoiceNo();$("invDate").value=nowLocal();$("custName").value="";$("custPhone").value="";
+      $("vatRate").value=15;$("paidAmt").value=0;$("payType").value="Cash";$("expAmt").value=0;$("notes").value="";$("showQr").checked=true;
+      items=[mkItem()];renderItems();calc();
+    }
+
+    $("langSel").addEventListener("change",e=>setLang(e.target.value));
+
+    try{
+      loadSettings();restorePanels();
+      if(!getLS("au.cnt"))saveLS("au.cnt","1");
+      $("invNo").value=useInvoiceNo();$("invDate").value=nowLocal();
+      items=[mkItem()];setLang(L);updateBrand();renderItems();calc();renderHistory();applyLockState();
+    }catch(e){console.error("Init failed:",e);alert("App failed to initialize: "+e.message);}
+  </script>
+</body>
+</html>
